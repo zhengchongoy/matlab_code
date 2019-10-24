@@ -1,0 +1,234 @@
+clc
+clear all
+close all
+
+nz=301;
+nx=151;
+nx1=301;
+
+fid = fopen('model_canshu_1m_20191023_1.dat','r');
+model = fscanf(fid,'%f',[3,inf]);
+
+z=model(1,:);
+x=model(2,:);
+mp=model(3,:);
+
+z=z;
+x=x;
+z1=reshape(z,nz,nx1);
+x1=reshape(x,nz,nx1);
+
+data = load('Theory_wn_1m20191023_1.dat');
+ky = data(:,1);
+KY = unique(ky);
+NY = length(KY);
+
+hy1  = data(:,2);
+rhy1 = data(:,3);
+ihy1 = data(:,4);
+
+hy3  = data(:,8);
+rhy3 = data(:,9);
+ihy3 = data(:,10);
+
+hy11=reshape(hy1,NY,nx);
+rhy11=reshape(rhy1,NY,nx);
+ihy11=reshape(ihy1,NY,nx);
+
+hy33=reshape(hy3,NY,nx);
+rhy33=reshape(rhy3,NY,nx);
+ihy33=reshape(ihy3,NY,nx);
+
+phy1_1=hy11(:,2); %   
+phy2_1=hy11(:,11); %  
+phy3_1=hy11(:,53); %  
+phy4_1=hy11(:,79); % 
+phy5_1=hy11(:,99); %  
+phy6_1=hy11(:,133); %  
+
+phy1_3=hy33(:,2); %   
+phy2_3=hy33(:,11); %  
+phy3_3=hy33(:,53); %  
+phy4_3=hy33(:,79); % 
+phy5_3=hy33(:,99); %  
+phy6_3=hy33(:,133); %  
+
+%%-------------------------------------------------------------------------
+%实部
+rphy1_1=rhy11(:,2); %   
+rphy2_1=rhy11(:,11); %  
+rphy3_1=rhy11(:,53); %  
+rphy4_1=rhy11(:,79); % 
+rphy5_1=rhy11(:,99); %  
+rphy6_1=rhy11(:,133); %  
+
+rphy1_3=rhy33(:,2); %   
+rphy2_3=rhy33(:,11); %  
+rphy3_3=rhy33(:,53); %  
+rphy4_3=rhy33(:,79); % 
+rphy5_3=rhy33(:,99); %  
+rphy6_3=rhy33(:,133); %  
+%%-------------------------------------------------------------------------
+iphy1_1=ihy11(:,2); %   
+iphy2_1=ihy11(:,11); %  
+iphy3_1=ihy11(:,53); %  
+iphy4_1=ihy11(:,79); % 
+iphy5_1=ihy11(:,99); %  
+iphy6_1=ihy11(:,133); %  
+
+iphy1_3=ihy33(:,2); %   
+iphy2_3=ihy33(:,11); %  
+iphy3_3=ihy33(:,53); %  
+iphy4_3=ihy33(:,79); % 
+iphy5_3=ihy33(:,99); %  
+iphy6_3=ihy33(:,133); %  
+%%-------------------------------------------------------------------------
+%振幅
+
+%%
+figure
+subplot(3,6,1)
+plot(log10(KY),log10(phy1_1),'r')
+title('z=0.1,x=0.02m,Ey振幅')
+
+subplot(3,6,7)
+plot(log10(KY),log10(rphy1_1),'r')
+title('z=0.1,x=0.02m,Ey实部')
+
+subplot(3,6,13)
+plot(log10(KY),log10(iphy1_1),'r')
+title('z=0.1,x=0.02m,Ey虚部')
+
+subplot(3,6,2)
+plot(log10(KY),log10(phy2_1),'r')
+title('z=0.1x=0.2m,Ey振幅')
+
+subplot(3,6,8)
+plot(log10(KY),log10(rphy2_1),'r')
+title('z=0.1x=0.2m,Ey实部')
+
+subplot(3,6,14)
+plot(log10(KY),log10(iphy2_1),'r')
+title('z=0.1x=0.2m,Ey虚部')
+
+subplot(3,6,3)
+plot(log10(KY),log10(phy3_1),'r')
+title('z=0.1,x=2m,Ey振幅')
+
+subplot(3,6,9)
+plot(log10(KY),log10(rphy3_1),'r')
+title('z=0.1,x=2m,Ey实部')
+
+subplot(3,6,15)
+plot(log10(KY),log10(iphy3_1),'r')
+title('z=0.1,x=2m,Ey虚部')
+
+subplot(3,6,4)
+plot(log10(KY),log10(phy4_1),'r')
+title('z=0.1,x=20m,Ey振幅')
+
+subplot(3,6,10)
+plot(log10(KY),log10(rphy4_1),'r')
+title('z=0.1,x=20m,Ey实部')
+
+subplot(3,6,16)
+plot(log10(KY),log10(iphy4_1),'r')
+title('z=0.1,x=20m,Ey虚部')
+
+subplot(3,6,5)
+plot(log10(KY),log10(phy5_1),'r')
+title('z=0.1,x=50m,Ey振幅')
+
+subplot(3,6,11)
+plot(log10(KY),log10(rphy5_1),'r')
+title('z=0.1,x=50m,Ey实部')
+
+subplot(3,6,17)
+plot(log10(KY),log10(iphy5_1),'r')
+title('z=0.1,x=50m,Ey虚部')
+
+subplot(3,6,6)
+plot(log10(KY),log10(phy6_1),'r')
+title('z=0.1,x=100m,Ey振幅')
+
+subplot(3,6,12)
+plot(log10(KY),log10(rphy6_1),'r')
+title('z=0.1,x=100m,Ey实部')
+
+subplot(3,6,18)
+plot(log10(KY),log10(iphy6_1),'r')
+title('z=0.1,x=100m,Ey虚部')
+
+figure
+subplot(3,6,1)
+plot(log10(KY),log10(phy1_3),'r')
+title('z=0.1,x=0.02m,Hy振幅')
+
+subplot(3,6,7)
+plot(log10(KY),log10(rphy1_3),'r')
+title('z=0.1,x=0.02m,Hy实部')
+
+subplot(3,6,13)
+plot(log10(KY),log10(iphy1_3),'r')
+title('z=0.1,x=0.02m,Hy虚部')
+
+subplot(3,6,2)
+plot(log10(KY),log10(phy2_3),'r')
+title('z=0.1x=0.2m,Hy振幅')
+
+subplot(3,6,8)
+plot(log10(KY),log10(rphy2_3),'r')
+title('z=0.1x=0.2m,Hy实部')
+
+subplot(3,6,14)
+plot(log10(KY),log10(iphy2_3),'r')
+title('z=0.1x=0.2m,Hy虚部')
+
+subplot(3,6,3)
+plot(log10(KY),log10(phy3_3),'r')
+title('z=0.1,x=2m,Hy振幅')
+
+subplot(3,6,9)
+plot(log10(KY),log10(rphy3_3),'r')
+title('z=0.1,x=2m,Hy实部')
+
+subplot(3,6,15)
+plot(log10(KY),log10(iphy3_3),'r')
+title('z=0.1,x=2m,Hy虚部')
+
+subplot(3,6,4)
+plot(log10(KY),log10(phy4_3),'r')
+title('z=0.1,x=20m,Hy振幅')
+
+subplot(3,6,10)
+plot(log10(KY),log10(rphy4_3),'r')
+title('z=0.1,x=20m,Hy实部')
+
+subplot(3,6,16)
+plot(log10(KY),log10(iphy4_3),'r')
+title('z=0.1,x=20m,Hy虚部')
+
+subplot(3,6,5)
+plot(log10(KY),log10(phy5_3),'r')
+title('z=0.1,x=50m,Hy振幅')
+
+subplot(3,6,11)
+plot(log10(KY),log10(rphy5_3),'r')
+title('z=0.1,x=50m,Hy实部')
+
+subplot(3,6,17)
+plot(log10(KY),log10(iphy5_3),'r')
+title('z=0.1,x=50m,Hy虚部')
+
+subplot(3,6,6)
+plot(log10(KY),log10(phy6_3),'r')
+title('z=0.1,x=100m,Hy振幅')
+
+subplot(3,6,12)
+plot(log10(KY),log10(rphy6_3),'r')
+title('z=0.1,x=100m,Hy实部')
+
+subplot(3,6,18)
+plot(log10(KY),log10(iphy6_3),'r')
+title('z=0.1,x=100m,Hy虚部')
+
