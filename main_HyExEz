@@ -1,0 +1,365 @@
+clear all
+close all
+clc;
+
+nx=301;
+
+nz=301;
+
+jf=11;
+na=nx*nz;
+
+bj=30;
+bjz1=bj;
+bjz2=bj;
+dx=nx-2*bj
+dz=(nz+1-2*bj)/2
+
+%------------------------------------------------------------------------
+%读取坐标
+fid = fopen('model_canshu_100M-whole.dat','r');
+model = fscanf(fid,'%f',[3,inf]);
+
+z=model(1,:);
+x=model(2,:);
+mp=model(3,:);
+
+z=z;
+x=x;
+
+mp=log10(mp);
+z1=reshape(z,nz,nx);
+x1=reshape(x,nz,nx);
+mp1=reshape(mp,nz,nx);
+
+z2=z1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+x2=x1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+mp2=mp1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+%--------------------------------------------------------------
+
+%%
+%读取Y方向数值解结果————————————————————————
+fid = fopen('EYHY_100M-whole.dat','r');
+ehy = fscanf(fid,'%f',[4,inf]);
+ery=ehy(1,1:na);
+eiy=ehy(2,1:na);
+
+hry=ehy(3,1:na);
+hiy=ehy(4,1:na);
+
+ey=ery+i*eiy;
+hy=hry+i*hiy;
+
+%读取Y方向解析解
+fid = fopen('wholespace_EYHY_100M-whole.DAT','r');
+datay = fscanf(fid,'%f',[6,inf]);
+
+datay1=datay(1,:);
+datay2=datay(2,:);
+datay5=datay(5,:);
+
+datay3=datay(3,:);
+datay4=datay(4,:);
+datay6=datay(6,:);
+
+tey=reshape(datay5,nz,nx);  
+rey=reshape(datay1,nz,nx);
+iey=reshape(datay2,nz,nx);
+thy=reshape(datay6,nz,nx);  
+rhy=reshape(datay3,nz,nx);
+ihy=reshape(datay4,nz,nx);
+
+%数组转换为二维数组
+ey1=reshape(ey,nz,nx);   
+hy1=reshape(hy,nz,nx); 
+ery1=reshape(ery,nz,nx);
+eiy1=reshape(eiy,nz,nx);
+hry1=reshape(hry,nz,nx);
+hiy1=reshape(hiy,nz,nx);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+hy2=hy1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+hry2=hry1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+hiy2=hiy1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+
+thy2=thy(bjz1+1:nz-bjz2,bj+1:nx-bj);
+rhy2=rhy(bjz1+1:nz-bjz2,bj+1:nx-bj);
+ihy2=ihy(bjz1+1:nz-bjz2,bj+1:nx-bj);
+
+ey2=ey1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+ery2=ery1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+eiy2=eiy1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+
+tey2=tey(bjz1+1:nz-bjz2,bj+1:nx-bj);
+rey2=rey(bjz1+1:nz-bjz2,bj+1:nx-bj);
+iey2=iey(bjz1+1:nz-bjz2,bj+1:nx-bj);
+
+abshy=abs(hy2);
+absthy=abs(thy2);
+
+absrhy=abs(hry2);
+absrthy=abs(rhy2);
+
+absrhy(dz,:)=0;
+
+absihy=abs(hiy2);
+absithy=abs(ihy2);
+
+absihy(dz,:)=0;
+
+absey=abs(ey2);
+abstey=abs(tey2);
+
+absrey=abs(ery2);
+absrtey=abs(rey2);
+
+absrey(dz,:)=0;
+
+absiey=abs(eiy2);
+absitey=abs(iey2);
+
+absiey(dz,:)=0;
+%%
+%读取X方向数值解结果————————————————————————
+fid = fopen('EXHX_100M-whole.dat','r');
+ehx = fscanf(fid,'%f',[4,inf]);
+erx=ehx(1,1:na);
+eix=ehx(2,1:na);
+
+hrx=ehx(3,1:na);
+hix=ehx(4,1:na);
+
+ex=erx+i*eix;
+hx=hrx+i*hix;
+
+%读取X方向解析解
+fid = fopen('wholespace_EXHX_100M-whole.DAT','r');
+datax = fscanf(fid,'%f',[6,inf]);
+
+datax1=datax(1,:);
+datax2=datax(2,:);
+datax5=datax(5,:);
+
+datax3=datax(3,:);
+datax4=datax(4,:);
+datax6=datax(6,:);
+
+tex=reshape(datax5,nz,nx);  
+rex=reshape(datax1,nz,nx);
+iex=reshape(datax2,nz,nx);
+thx=reshape(datax6,nz,nx);  
+rhx=reshape(datax3,nz,nx);
+ihx=reshape(datax4,nz,nx);
+
+%数组转换为二维数组
+ex1=reshape(ex,nz,nx);   
+hx1=reshape(hx,nz,nx);  
+erx1=reshape(erx,nz,nx);
+eix1=reshape(eix,nz,nx);
+hrx1=reshape(hrx,nz,nx);
+hix1=reshape(hix,nz,nx);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+hx2=hx1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+hrx2=hrx1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+hix2=hix1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+
+thx2=thx(bjz1+1:nz-bjz2,bj+1:nx-bj);
+rhx2=rhx(bjz1+1:nz-bjz2,bj+1:nx-bj);
+ihx2=ihx(bjz1+1:nz-bjz2,bj+1:nx-bj);
+
+ex2=ex1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+erx2=erx1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+eix2=eix1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+
+tex2=tex(bjz1+1:nz-bjz2,bj+1:nx-bj);
+rex2=rex(bjz1+1:nz-bjz2,bj+1:nx-bj);
+iex2=iex(bjz1+1:nz-bjz2,bj+1:nx-bj);
+
+
+abshx=abs(hx2);
+absthx=abs(thx2);
+
+absrhx=abs(hrx2);
+absrthx=abs(rhx2);
+
+absrhx(dz,:)=0;
+
+absihx=abs(hix2);
+absithx=abs(ihx2);
+
+absihx(dz,:)=0;
+
+absex=abs(ex2);
+abstex=abs(tex2);
+
+absrex=abs(erx2);
+absrtex=abs(rex2);
+
+% absrex(dz,:)=0;
+
+absiex=abs(eix2);
+absitex=abs(iex2);
+
+% absiex(dz,:)=0;
+%%
+%读取z方向数值解结果————————————————————————
+fid = fopen('EZHZ_100M-whole.dat','r');
+ehz = fscanf(fid,'%f',[4,inf]);
+erz=ehz(1,1:na);
+eiz=ehz(2,1:na);
+
+hrz=ehz(3,1:na);
+hiz=ehz(4,1:na);
+
+ez=erz+i*eiz;
+hz=hrz+i*hiz;
+
+%读取z方向解析解
+fid = fopen('wholespace_EZHZ_100M-whole.DAT','r');
+dataz = fscanf(fid,'%f',[6,inf]);
+
+dataz1=dataz(1,:);
+dataz2=dataz(2,:);
+dataz5=dataz(5,:);
+
+dataz3=dataz(3,:);
+dataz4=dataz(4,:);
+dataz6=dataz(6,:);
+
+tez=reshape(dataz5,nz,nz);  
+rez=reshape(dataz1,nz,nz);
+iez=reshape(dataz2,nz,nz);
+thz=reshape(dataz6,nz,nz);  
+rhz=reshape(dataz3,nz,nz);
+ihz=reshape(dataz4,nz,nz);
+
+%数组转换为二维数组
+ez1=reshape(ez,nz,nz);   
+hz1=reshape(hz,nz,nz);   
+erz1=reshape(erz,nz,nx);
+eiz1=reshape(eiz,nz,nx);
+hrz1=reshape(hrz,nz,nz);
+hiz1=reshape(hiz,nz,nz);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+hz2=hz1(bjz1+1:nz-bjz2,bj+1:nz-bj);
+hrz2=hrz1(bjz1+1:nz-bjz2,bj+1:nz-bj);
+hiz2=hiz1(bjz1+1:nz-bjz2,bj+1:nz-bj);
+
+thz2=thz(bjz1+1:nz-bjz2,bj+1:nz-bj);
+rhz2=rhz(bjz1+1:nz-bjz2,bj+1:nz-bj);
+ihz2=ihz(bjz1+1:nz-bjz2,bj+1:nz-bj);
+
+ez2=ez1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+erz2=erz1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+eiz2=eiz1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+
+tez2=tez(bjz1+1:nz-bjz2,bj+1:nx-bj);
+rez2=rez(bjz1+1:nz-bjz2,bj+1:nx-bj);
+iez2=iez(bjz1+1:nz-bjz2,bj+1:nx-bj);
+
+abshz=abs(hz2);
+absthz=abs(thz2);
+
+absrhz=abs(hrz2);
+absrthz=abs(rhz2);
+
+absrhz(dz,:)=0;
+
+absihz=abs(hiz2);
+absithz=abs(ihz2);
+
+absihz(dz,:)=0;
+
+absez=abs(ez2);
+abstez=abs(tez2);
+
+absrez=abs(erz2);
+absrtez=abs(rez2);
+
+absrez(dz,:)=0;
+
+absiez=abs(eiz2);
+absitez=abs(iez2);
+
+absiez(dz,:)=0;
+%%
+le=2;
+figure
+%y振幅log图
+% subplot(2,3,1)
+% contour(x2,z2,log10(abs(thy2)),'k','LineWidth',1.2,'LevelStep',1);
+% % contour(x2,z2,abs(hy2),'r','LevelStep',5);
+% title('log10(abs(Hy))','FontName','Times New Roman','FontSize',10)
+% hold on
+% contour(x2,z2,log10(abs(hy2)),'r--','LineWidth',0.5,'LevelStep',1);
+% % contour(x2,z2,abs(thy2),'k','LevelStep',5);
+% xlabel('x/m')
+% ylabel('z/m')
+% colorbar
+% legend('Analytic solution','Numerical solution')
+
+subplot(2,3,3)
+contour(x2,z2,log10(abs(rhy2)),'k','LineWidth',1.2,'LevelStep',le);
+% contour(x2,z2,abs(hry2),'r','LevelStep',le);
+title('Real(H_y)','FontName','Times New Roman','FontSize',10)
+hold on
+contour(x2,z2,log10(absrhy),'r--','LineWidth',0.5,'LevelStep',le);
+% contour(x2,z2,abs(rhy2),'k','LevelStep',le);
+xlabel('x/m','FontName','Times New Roman','FontSize',10)
+ylabel('z/m','FontName','Times New Roman','FontSize',10)
+
+subplot(2,3,6)
+contour(x2,z2,log10(abs(ihy2)),'k','LineWidth',1.2,'LevelStep',le);
+% contour(x2,z2,abs(hiy2),'r','LevelStep',le);
+title('Imag(H_y)','FontName','Times New Roman','FontSize',10)
+hold on
+contour(x2,z2,log10(absihy),'r--','LineWidth',0.5,'LevelStep',le);
+% contour(x2,z2,abs(ihy2),'k','LevelStep',le);
+xlabel('x/m','FontName','Times New Roman','FontSize',10)
+ylabel('z/m','FontName','Times New Roman','FontSize',10)
+
+subplot(2,3,1)
+contour(x2,z2,log10(abs(rex2)),'k','LineWidth',1.2,'LevelStep',le);
+% contour(x2,z2,abs(hry2),'r','LevelStep',le);
+title('Real(E_x)','FontName','Times New Roman','FontSize',10)
+hold on
+contour(x2,z2,log10(absrex),'r--','LineWidth',0.5,'LevelStep',le);
+% contour(x2,z2,abs(rhy2),'k','LevelStep',le);
+xlabel('x/m','FontName','Times New Roman','FontSize',10)
+ylabel('z/m','FontName','Times New Roman','FontSize',10)
+
+subplot(2,3,4)
+contour(x2,z2,log10(abs(iex2)),'k','LineWidth',1.2,'LevelStep',le);
+% contour(x2,z2,abs(hiy2),'r','LevelStep',le);
+title('Imag(E_x)','FontName','Times New Roman','FontSize',10)
+hold on
+contour(x2,z2,log10(absiex),'r--','LineWidth',0.5,'LevelStep',le);
+% contour(x2,z2,abs(ihy2),'k','LevelStep',le);
+xlabel('x/m','FontName','Times New Roman','FontSize',10)
+ylabel('z/m','FontName','Times New Roman','FontSize',10)
+
+
+subplot(2,3,2)
+contour(x2,z2,log10(abs(rez2)),'k','LineWidth',1.2,'LevelStep',le);
+% contour(x2,z2,abs(hry2),'r','LevelStep',le);
+title('Real(E_z)','FontName','Times New Roman','FontSize',10)
+hold on
+contour(x2,z2,log10(absrez),'r--','LineWidth',0.5,'LevelStep',le);
+% contour(x2,z2,abs(rhy2),'k','LevelStep',le);
+xlabel('x/m','FontName','Times New Roman','FontSize',10)
+ylabel('z/m','FontName','Times New Roman','FontSize',10)
+
+
+subplot(2,3,5)
+contour(x2,z2,log10(abs(iez2)),'k','LineWidth',1.2,'LevelStep',le);
+% contour(x2,z2,abs(hiy2),'r','LevelStep',le);
+title('Imag(E_z)','FontName','Times New Roman','FontSize',10)
+hold on
+contour(x2,z2,log10(absiez),'r--','LineWidth',0.5,'LevelStep',le);
+% contour(x2,z2,abs(ihy2),'k','LevelStep',le);
+xlabel('x/m','FontName','Times New Roman','FontSize',10)
+ylabel('z/m','FontName','Times New Roman','FontSize',10)
+legend('Analytic solution','Numerical solution')
+
