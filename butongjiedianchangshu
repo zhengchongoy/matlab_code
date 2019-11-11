@@ -1,0 +1,259 @@
+clc
+clear all
+close all
+
+nz=301;
+nx=151;
+nx1=301;
+pt=156;
+
+fid = fopen('model_canshu_100m_002_whole1_y.dat','r');
+model = fscanf(fid,'%f',[3,inf]);
+
+z=model(1,:);
+x=model(2,:);
+z1=reshape(z,nz,nx1);
+x1=reshape(x,nz,nx1);
+
+%%---------------------------------------------------------------------------------------
+%介电常数为1
+data1 = load('Theory_wn_100m_002_whole1_y.dat');
+ky = data1(:,1);
+KY = unique(ky);
+NY = length(KY);
+
+hy1  = data1(:,11);
+rhy1 = data1(:,12);
+ihy1 = data1(:,13);
+
+ey1  = data1(:,5);
+rey1 = data1(:,6);
+iey1 = data1(:,7);
+
+hy11=reshape(hy1,NY,nx);
+rhy11=reshape(rhy1,NY,nx);
+ihy11=reshape(ihy1,NY,nx);
+
+ey11=reshape(ey1,NY,nx);
+rey11=reshape(rey1,NY,nx);
+iey11=reshape(iey1,NY,nx);
+
+ey1_1=ey11(:,pt);
+rey1_1=rey11(:,pt);
+iey1_1=iey11(:,pt);
+hy1_1=hy11(:,pt);
+rhy1_1=rhy11(:,pt);
+ihy1_1=ihy11(:,pt);
+
+%%---------------------------------------------------------------------------------------
+%介电常数为2
+data2 = load('Theory_wn_100m_002_whole2_y.dat');
+
+hy2  = data2(:,11);
+rhy2 = data2(:,12);
+ihy2 = data2(:,13);
+
+ey2  = data2(:,5);
+rey2 = data2(:,6);
+iey2 = data2(:,7);
+
+hy22=reshape(hy2,NY,nx);
+rhy22=reshape(rhy2,NY,nx);
+ihy22=reshape(ihy2,NY,nx);
+
+ey22=reshape(ey2,NY,nx);
+rey22=reshape(rey2,NY,nx);
+iey22=reshape(iey2,NY,nx);
+
+ey2_1=ey22(:,pt);
+rey2_1=rey22(:,pt);
+iey2_1=iey22(:,pt);
+
+hy2_1=hy22(:,pt);
+rhy2_1=rhy22(:,pt);
+ihy2_1=ihy22(:,pt);
+
+%%---------------------------------------------------------------------------------------
+%介电常数为5
+data5 = load('Theory_wn_100m_002_whole5_y.dat');
+
+hy5  = data5(:,11);
+rhy5 = data5(:,12);
+ihy5 = data5(:,13);
+
+ey5  = data5(:,5);
+rey5 = data5(:,6);
+iey5 = data5(:,7);
+
+hy55=reshape(hy5,NY,nx);
+rhy55=reshape(rhy5,NY,nx);
+ihy55=reshape(ihy5,NY,nx);
+
+ey55=reshape(ey5,NY,nx);
+rey55=reshape(rey5,NY,nx);
+iey55=reshape(iey5,NY,nx);
+
+ey5_1=ey55(:,pt);
+rey5_1=rey55(:,pt);
+iey5_1=iey55(:,pt);
+
+hy5_1=hy55(:,pt);
+rhy5_1=rhy55(:,pt);
+ihy5_1=ihy55(:,pt);
+
+%%---------------------------------------------------------------------------------------
+%介电常数为10
+data10 = load('Theory_wn_100m_002_whole10_y.dat');
+
+hy10  = data10(:,11);
+rhy10 = data10(:,12);
+ihy10 = data10(:,13);
+
+ey10  = data10(:,5);
+rey10 = data10(:,6);
+iey10 = data10(:,7);
+
+hy1010=reshape(hy10,NY,nx);
+rhy1010=reshape(rhy10,NY,nx);
+ihy1010=reshape(ihy10,NY,nx);
+
+ey1010=reshape(ey10,NY,nx);
+rey1010=reshape(rey10,NY,nx);
+iey1010=reshape(iey10,NY,nx);
+
+ey10_1=ey1010(:,pt);
+rey10_1=rey1010(:,pt);
+iey10_1=iey1010(:,pt);
+
+hy10_1=hy1010(:,pt);
+rhy10_1=rhy1010(:,pt);
+ihy10_1=ihy1010(:,pt);
+
+%%---------------------------------------------------------------------------------------
+%介电常数为15
+data15 = load('Theory_wn_100m_002_whole15_y.dat');
+
+hy15  = data15(:,11);
+rhy15 = data15(:,12);
+ihy15 = data15(:,13);
+
+ey15  = data15(:,5);
+rey15 = data15(:,6);
+iey15 = data15(:,7);
+
+hy1515=reshape(hy15,NY,nx);
+rhy1515=reshape(rhy15,NY,nx);
+ihy1515=reshape(ihy15,NY,nx);
+
+ey1515=reshape(ey15,NY,nx);
+rey1515=reshape(rey15,NY,nx);
+iey1515=reshape(iey15,NY,nx);
+
+ey15_1=ey1515(:,pt);
+rey15_1=rey1515(:,pt);
+iey15_1=iey1515(:,pt);
+
+hy15_1=hy1515(:,pt);
+rhy15_1=rhy1515(:,pt);
+ihy15_1=ihy1515(:,pt);
+
+%%---------------------------------------------------------------------------------------
+%介电常数为20
+data20 = load('Theory_wn_100m_002_whole20_y.dat');
+
+hy20  = data20(:,11);
+rhy20 = data20(:,12);
+ihy20 = data20(:,13);
+
+ey20  = data20(:,5);
+rey20 = data20(:,6);
+iey20 = data20(:,7);
+
+hy2020=reshape(hy20,NY,nx);
+rhy2020=reshape(rhy20,NY,nx);
+ihy2020=reshape(ihy20,NY,nx);
+
+ey2020=reshape(ey20,NY,nx);
+rey2020=reshape(rey20,NY,nx);
+iey2020=reshape(iey20,NY,nx);
+
+ey20_1=ey2020(:,pt);
+rey20_1=rey2020(:,pt);
+iey20_1=iey2020(:,pt);
+
+hy20_1=hy2020(:,pt);
+rhy20_1=rhy2020(:,pt);
+ihy20_1=ihy2020(:,pt);
+
+%%
+figure
+subplot(2,2,1)
+plot(log10(KY),ey1_1,'k')
+hold on
+plot(log10(KY),ey2_1,'r')
+hold on
+plot(log10(KY),ey5_1,'b')
+hold on
+plot(log10(KY),ey10_1,'g')
+hold on
+plot(log10(KY),ey15_1,'color',[36,169,225]/225)
+hold on
+plot(log10(KY),ey20_1,'color',[222,125,44]/225)
+legend('1','2','5','10','15','20')
+title('10m,E_y')
+xlabel('log10(Ky)')
+ylabel('Ey')
+
+subplot(2,2,2)
+plot(log10(KY),hy1_1,'k')
+hold on
+plot(log10(KY),hy2_1,'r')
+hold on
+plot(log10(KY),hy5_1,'b')
+hold on
+plot(log10(KY),hy10_1,'g')
+hold on
+plot(log10(KY),hy15_1,'color',[36,169,225]/225)
+hold on
+plot(log10(KY),hy20_1,'color',[222,125,44]/225)
+legend('1','2','5','10','15','20')
+title('10m,H_y')
+xlabel('log10(Ky)')
+ylabel('Hy')
+
+
+subplot(2,2,3)
+plot(KY,ey1_1,'k')
+hold on
+plot(KY,ey2_1,'r')
+hold on
+plot(KY,ey5_1,'b')
+hold on
+plot(KY,ey10_1,'g')
+hold on
+plot(KY,ey15_1,'color',[36,169,225]/225)
+hold on
+plot(KY,ey20_1,'color',[222,125,44]/225)
+legend('1','2','5','10','15','20')
+axis([0 2 0 0 900])
+title('10m,E_y')
+xlabel('Ky')
+ylabel('Ey')
+
+subplot(2,2,4)
+plot(KY,hy1_1,'k')
+hold on
+plot(KY,hy2_1,'r')
+hold on
+plot(KY,hy5_1,'b')
+hold on
+plot(KY,hy10_1,'g')
+hold on
+plot(KY,hy15_1,'color',[36,169,225]/225)
+hold on
+plot(KY,hy20_1,'color',[222,125,44]/225)
+legend('1','2','5','10','15','20')
+axis([0 300 0 60])
+title('10m,H_y')
+xlabel('Ky')
+ylabel('Hy')
