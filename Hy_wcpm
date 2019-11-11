@@ -1,0 +1,135 @@
+clear all
+close all
+clc;
+
+nx=301;
+nz=301;
+
+jf=11;
+na=nx*nz;
+
+bj=15;
+bjz1=bj;
+bjz2=bj;
+error=5;
+%------------------------------------------------------------------------
+%读取坐标
+fid = fopen('model_canshu_100m_002_whole5_5.dat','r');
+model = fscanf(fid,'%f',[3,inf]);
+
+z=model(1,:);
+x=model(2,:);
+mp=model(3,:);
+
+z=z;
+x=x;
+
+mp=log10(mp);
+
+z1=reshape(z,nz,nx);
+x1=reshape(x,nz,nx);
+mp1=reshape(mp,nz,nx);
+%--------------------------------------------------------------
+%%读取Y方向数值解结果%%%%%%%%%%%%%%%%%%%
+fid = fopen('EYHY_100m_002_whole5_5.dat','r');
+ehy = fscanf(fid,'%f',[4,inf]);
+
+ery=ehy(1,1:na);
+eiy=ehy(2,1:na);
+
+hry=ehy(3,1:na);
+hiy=ehy(4,1:na);
+
+ey=ery+i*eiy;
+hy=hry+i*hiy;
+%--------------------------------------------------------------
+%读取Y方向解析解
+fid = fopen('wholespace_EYHY_100m_002_whole5_5.DAT','r');
+datay = fscanf(fid,'%f',[6,inf]);
+
+datay1=datay(6,:);
+datay2=datay(3,:);
+datay5=datay(4,:);
+thy=reshape(datay1,nz,nx);  %ABS解析解
+rthy=reshape(datay2,nz,nx);
+ithy=reshape(datay5,nz,nx);
+%--------------------------------------------------------------
+hy1=reshape(hy,nz,nx);    
+hry1=reshape(hry,nz,nx);
+hiy1=reshape(hiy,nz,nx);
+
+hy2=hy1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+hry2=hry1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+hiy2=hiy1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+
+thy2=thy(bjz1+1:nz-bjz2,bj+1:nx-bj);
+rthy2=rthy(bjz1+1:nz-bjz2,bj+1:nx-bj);
+ithy2=ithy(bjz1+1:nz-bjz2,bj+1:nx-bj);
+
+z2=z1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+x2=x1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+mp2=mp1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+%--------------------------------------------------------------
+dzl=(dz+1)/2
+dx=size(ithy2,1);
+dz=size(ithy2,2);
+abshy=abs(hy2);
+absthy=abs(thy2);
+wcy=(abshy(dz1,:)-(absthy(dz1,:)+1.e-20))./(absthy(dz1,:)+1.e-20)*100;
+wcy=abs(wcy);
+for i =1:dx
+    if wcy(i)>error
+        wcy(i)=error;
+    end
+end
+%--------------------------------------------------------------
+wcpm=abs((abshy-abs(thy2+1.e-20))./abs(thy2+1.e-20))*100;
+for i=1:dx
+    for j=1:dz
+        if(wcpm(i,j)<1)
+            wcpm(i,j)=0;
+        end
+    end
+end
+%%
+le=0.3;
+figure
+subplot(3,3,1)
+contour(x2,z2,log10(abs(hy2)),'r','LevelStep',le);
+title('(H_y)','FontName','Times New Roman','FontSize',10)
+hold on
+contour(x2,z2,log10(abs(thy2)),'k','LevelStep',le);
+
+subplot(3,3,2)
+plot(x2(1,:),log10(abshy(dz,:)),'r',x2(1,:),log10(absthy(dz,:)),'k')
+legend('Numerical solution','Analytic solution')
+title('源附近一条线对比')
+
+subplot(3,3,3)
+plot(x2(1,:),wcy);
+ylabel('%');
+title('误差百分比')
+
+subplot(3,3,4)
+contour(x2,z2,log10(abs(hry2)),'r','LevelStep',le);
+title('Real(H_y)','FontName','Times New Roman','FontSize',10)
+hold on
+contour(x2,z2,log10(abs(rthy2)),'k','LevelStep',le);
+
+subplot(3,3,5)
+contour(x2,z2,log10(abs(hiy2)),'r','LevelStep',le);
+title('Imag(H_y)','FontName','Times New Roman','FontSize',10)
+hold on
+contour(x2,z2,log10(abs(ithy2)),'k','LevelStep',le);
+
+
+
+subplot(3,3,6)
+contourf(x2,z2,log10(wcpm))
+absthy2=abs(thy2);
+abshy2=abs(hy2); 
+% figure
+% plot(x1,z1,z1,x1)
+
+
+
