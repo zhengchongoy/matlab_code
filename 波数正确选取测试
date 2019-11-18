@@ -1,6 +1,6 @@
- clear all
- close all
- clc;
+clear all
+close all
+clc;
 
 nx=301;
 nz=301;
@@ -13,11 +13,6 @@ bjz2=bj;
 dx=nx-2*bj
 dz=(nz+1-2*bj)/2-1
 %------------------------------------------------------------------------
-%读取波数
-% fid = fopen('boshu.XYZ','r');
-% boshu = fscanf(fid,'%f',[1,inf]);
-% boshu = boshu';
-
 %读取坐标
 fid = fopen('analytic_EYHY_100m_whole_0.3_sig_0.00001.dat','r');
 model = fscanf(fid,'%f',[3,inf]);
