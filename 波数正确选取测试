@@ -1,0 +1,140 @@
+ clear all
+ close all
+ clc;
+
+nx=301;
+nz=301;
+jf=11;
+na=nx*nz;
+
+bj=0;
+bjz1=bj;
+bjz2=bj;
+dx=nx-2*bj
+dz=(nz+1-2*bj)/2-1
+%------------------------------------------------------------------------
+%读取波数
+% fid = fopen('boshu.XYZ','r');
+% boshu = fscanf(fid,'%f',[1,inf]);
+% boshu = boshu';
+
+%读取坐标
+fid = fopen('analytic_EYHY_100m_whole_0.3_sig_0.00001.dat','r');
+model = fscanf(fid,'%f',[3,inf]);
+
+zz=model(1,:);
+xx=model(2,:);
+mp=model(3,:);
+
+% z=z;
+% x=x;
+%--------------------------------------------------------------
+%读取Y方向解析解
+fid = fopen('analytic_EYHY_100m_whole_0.3_sig_0.00001.dat','r');
+datay = fscanf(fid,'%f',[6,inf]);
+tey=datay(5,:);
+thy=datay(6,:);
+tey1=reshape(tey,nz,nx);
+thy1=reshape(thy,nz,nx); 
+imaghy=datay(4,:);
+imaghy1=reshape(imaghy,nz,nx);
+%--------------------------------------------------------------
+fid = fopen('Theory_wn_100m_whole_0.3_sig_0.00001.dat','r');
+datayb = fscanf(fid,'%f',[2,inf]);
+szey=datayb(1,:);
+szhy=datayb(2,:);
+
+szey1=reshape(szey,nz,nx);
+szhy1=reshape(szhy,nz,nx); 
+%-----------------------------------------------------------------
+%数组转换为二维数组
+
+mp=log10(mp);
+%转换为二维数据
+z1=reshape(zz,nz,nx);
+x1=reshape(xx,nz,nx);
+mp1=reshape(mp,nz,nx);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+tey2=tey1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+thy2=thy1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+szey2=szey1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+szhy2=szhy1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+z2=z1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+x2=x1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+mp2=mp1(bjz1+1:nz-bjz2,bj+1:nx-bj);
+
+le=0.5;
+%%
+absthy2=log10(abs(thy2));
+abszhyb3=log10(abs(szhy2));
+
+abstey2=log10(abs(tey2));
+abszeyb3=log10(abs(szey2));
+
+figure
+subplot(3,3,1)
+contour(x2,z2,log10(abs(tey2)),'k','LevelStep',le);
+hold on
+contour(x2,z2,log10(abs(szey2)),'r','LevelStep',le);
+legend('解析解','数值解')
+
+subplot(3,3,2)
+plot(x2(1,:),abstey2(dz,:),'r')
+hold on
+plot(x2(1,:),abszeyb3(dz,:),'k')
+title('Ey源附近一条线')
+legend('变换前','变换后')
+title('Ey')
+
+wcey=(abszeyb3(dz,:)-abstey2(dz,:))./abstey2(dz,:);
+wcey=abs(wcey);
+for i=1:dx
+    if wcey(i)>0.05
+        wcey(i)=0.05;
+    end
+end
+wcey=dz*wcey;
+subplot(3,3,3)
+plot(x2(1,:),wcey)
+
+subplot(3,3,4)
+contour(x2,z2,log10(abs(thy2)),'k','LevelStep',le);
+hold on
+contour(x2,z2,log10(abs(szhy2)),'r','LevelStep',le);
+legend('解析解','数值解')
+title('Hy')
+
+subplot(3,3,5)
+plot(x2(1,:),absthy2(dz,:),'r')
+hold on
+plot(x2(1,:),abszhyb3(dz,:),'k')
+legend('解析解','数值解')
+title('Hy源附近一条线')
+
+wchy=(abszhyb3(dz,:)-absthy2(dz,:))./absthy2(dz,:);
+wchy=abs(wchy);
+for i=1:dx
+    if wchy(i)>0.05
+        wchy(i)=0.05;
+    end
+end
+wchy=dz*wchy;
+subplot(3,3,6)
+plot(x2(1,:),wchy)
+xlabel('x')
+ylabel('%')
+wcpm=abs((abszhyb3-(absthy2+1.e-20))./(absthy2+1.e-20))*100;
+for i=1:159
+    for j=1:159
+        if(wcpm(i,j)<1)
+            wcpm(i,j)=0;
+        end
+    end
+end
+
+% wchyb=(abszhyb3(1,:)-absthy2(1,:))./absthy2(1,:)*dz;
+% wchyb=abs(wchyb);
+% subplot(3,3,7)
+% plot(x2(1,:),wchyb)
+% subplot(2,2,4)
+% contour(x2,z2,log10(abs(szhy2)),'r','LevelStep',le);
