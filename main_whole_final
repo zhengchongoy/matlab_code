@@ -1,0 +1,737 @@
+%半空间主剖面三个场量数值解解析解对比
+clear all
+close all
+clc;
+
+nx=301;
+nz=301;
+na=nx*nz;
+
+bsz1=15;
+bsz2=15;
+bsx1=15;
+bsx2=15;
+btz1=15;
+btz2=15;
+btx1=15;
+btx2=15;
+%--------------------------------------------------------------------------
+%读取坐标
+fid = fopen('model_canshu_100m_whole_paper1.dat','r');
+model = fscanf(fid,'%f',[3,inf]);
+
+z=model(1,:);
+x=model(2,:);
+mp=model(3,:);
+
+z=z;
+x=x;
+mp=log10(mp);
+
+z1=reshape(z,nz,nx);
+x1=reshape(x,nz,nx);
+mp1=reshape(mp,nz,nx);
+
+z2=z1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+x2=x1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+mp2=mp1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+%--------------------------------------------------------------------------
+%读取Y方向数值解结果-------------------------------------------------------
+fid = fopen('EYHY_100m_whole_paper1.dat','r');
+ehy = fscanf(fid,'%f',[4,inf]);
+ery=ehy(1,1:na);
+eiy=ehy(2,1:na);
+
+hry=ehy(3,1:na);
+hiy=ehy(4,1:na);
+
+ey=ery+i*eiy;
+hy=hry+i*hiy;
+
+%数组转换为二维数组
+ey1=reshape(ey,nz,nx);   
+hy1=reshape(hy,nz,nx); 
+ery1=reshape(ery,nz,nx);
+eiy1=reshape(eiy,nz,nx);
+hry1=reshape(hry,nz,nx);
+hiy1=reshape(hiy,nz,nx);
+
+hy2=hy1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+hry2=hry1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+hiy2=hiy1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+
+ey2=ey1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+ery2=ery1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+eiy2=eiy1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+
+%读取X方向数值解结果-------------------------------------------------------
+fid = fopen('EXHX_100m_whole_paper1.dat','r');
+ehx = fscanf(fid,'%f',[4,inf]);
+erx=ehx(1,1:na);
+eix=ehx(2,1:na);
+
+hrx=ehx(3,1:na);
+hix=ehx(4,1:na);
+
+ex=erx+i*eix;
+hx=hrx+i*hix;
+
+ex1=reshape(ex,nz,nx);   
+hx1=reshape(hx,nz,nx);  
+erx1=reshape(erx,nz,nx);
+eix1=reshape(eix,nz,nx);
+hrx1=reshape(hrx,nz,nx);
+hix1=reshape(hix,nz,nx);
+
+hx2=hx1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+hrx2=hrx1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+hix2=hix1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+
+ex2=ex1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+erx2=erx1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+eix2=eix1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+%读取z方向数值解结果-------------------------------------------------------
+fid = fopen('EZHZ_100m_whole_paper1.dat','r');
+ehz = fscanf(fid,'%f',[4,inf]);
+erz=ehz(1,1:na);
+eiz=ehz(2,1:na);
+
+hrz=ehz(3,1:na);
+hiz=ehz(4,1:na);
+
+ez=erz+i*eiz;
+hz=hrz+i*hiz;
+
+%数组转换为二维数组
+ez1=reshape(ez,nz,nx);   
+hz1=reshape(hz,nz,nx);   
+erz1=reshape(erz,nz,nx);
+eiz1=reshape(eiz,nz,nx);
+hrz1=reshape(hrz,nz,nx);
+hiz1=reshape(hiz,nz,nx);
+
+hz2=hz1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+hrz2=hrz1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+hiz2=hiz1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+
+ez2=ez1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+erz2=erz1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+eiz2=eiz1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+
+%读取XYZ方向解析解%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%读取Y方向解析解
+fid = fopen('analytic_EYHY_100m_whole_paper1.DAT','r');
+datay = fscanf(fid,'%f',[6,inf]);
+datay3=datay(3,:);
+datay4=datay(4,:);
+datay6=datay(6,:);
+thy=reshape(datay6,nz,nx); 
+thry=reshape(datay3,nz,nx);
+thiy=reshape(datay4,nz,nx); 
+
+datay1=datay(1,:);
+datay2=datay(2,:);
+datay5=datay(5,:);
+tey=reshape(datay1,nz,nx); 
+tery=reshape(datay2,nz,nx);
+teiy=reshape(datay5,nz,nx); 
+
+tey1=reshape(tey,nz,nx);   
+thy1=reshape(thy,nz,nx); 
+tery1=reshape(tery,nz,nx);
+teiy1=reshape(teiy,nz,nx);
+thry1=reshape(thry,nz,nx);
+thiy1=reshape(thiy,nz,nx);
+
+thy2=thy1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+thry2=thry1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+thiy2=thiy1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+
+tey2=tey1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+tery2=tery1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+teiy2=teiy1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+
+%读取X方向解析解
+fid = fopen('analytic_EXHX_100m_whole_paper1.DAT','r');
+datax = fscanf(fid,'%f',[6,inf]);
+datax1=datax(1,:);
+datax2=datax(2,:);
+datax5=datax(5,:);
+tex=reshape(datax5,nz,nx);
+terx=reshape(datax1,nz,nx);
+teix=reshape(datax2,nz,nx);
+
+datax3=datax(3,:);
+datax4=datax(4,:);
+datax6=datax(6,:);
+thx=reshape(datax6,nz,nx); 
+thrx=reshape(datax3,nz,nx);
+thix=reshape(datax4,nz,nx);
+
+tex1=reshape(tex,nz,nx);   
+thx1=reshape(thx,nz,nx);  
+terx1=reshape(terx,nz,nx);
+teix1=reshape(teix,nz,nx);
+thrx1=reshape(thrx,nz,nx);
+thix1=reshape(thix,nz,nx);
+
+thx2=thx1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+thrx2=thrx1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+thix2=thix1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+
+tex2=tex1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+terx2=terx1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+teix2=teix1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+% 读取Z方向解析解
+fid = fopen('analytic_EZHZ_100m_whole_paper1.DAT','r');
+dataz = fscanf(fid,'%f',[6,inf]);
+dataz1=dataz(1,:);
+dataz2=dataz(2,:);
+dataz5=dataz(5,:);
+tez=reshape(dataz5,nz,nx);
+terz=reshape(dataz1,nz,nx);
+teiz=reshape(dataz2,nz,nx);
+
+dataz3=dataz(3,:);
+dataz4=dataz(4,:);
+dataz6=dataz(6,:);
+thz=reshape(dataz6,nz,nx); 
+thrz=reshape(dataz3,nz,nx);
+thiz=reshape(dataz4,nz,nx);
+
+tez1=reshape(tez,nz,nx);   
+thz1=reshape(thz,nz,nx);   
+terz1=reshape(terz,nz,nx);
+teiz1=reshape(teiz,nz,nx);
+thrz1=reshape(thrz,nz,nx);
+thiz1=reshape(thiz,nz,nx);
+
+thz2=thz1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+thrz2=thrz1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+thiz2=thiz1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+
+tez2=tez1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+terz2=terz1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+teiz2=teiz1(bsz1+1:nz-bsz2,bsx1+1:nx-bsx2);
+
+%全部转化为绝对值----------------------------------------------------------
+abshx=abs(hx2);
+abshrx=abs(hrx2);
+abshix=abs(hix2);
+absthx=abs(thx2);
+absthrx=abs(thrx2);
+absthix=abs(thix2);
+
+absex=abs(ex2);
+abserx=abs(erx2);
+abseix=abs(eix2);
+abstex=abs(tex2);
+absterx=abs(terx2);
+absteix=abs(teix2);
+
+abshy=abs(hy2);
+abshry=abs(hry2);
+abshiy=abs(hiy2);
+absthy=abs(thy2);
+absthry=abs(thry2);
+absthiy=abs(thiy2);
+
+absey=abs(ey2);
+absery=abs(ery2);
+abseiy=abs(eiy2);
+abstey=abs(tey2);
+abstery=abs(tery2);
+absteiy=abs(teiy2);
+
+abshz=abs(hz2);
+abshrz=abs(hrz2);
+abshiz=abs(hiz2);
+absthz=abs(thz2);
+absthrz=abs(thrz2);
+absthiz=abs(thiz2);
+
+absez=abs(ez2);
+abserz=abs(erz2);
+abseiz=abs(eiz2);
+abstez=abs(tez2);
+absterz=abs(terz2);
+absteiz=abs(teiz2);
+%--------------------------------------------------------------------------
+%%
+%误差误差误差误差误差误差误差误差误差误差误差误差误差误差误差误差误差误差
+%误差误差误差误差误差误差误差误差误差误差误差误差误差误差误差误差误差误差
+%误差误差误差误差误差误差误差误差误差误差误差误差误差误差误差误差误差误差
+dx=size(hry2,1)
+dz=size(hry2,2)
+absex1=absex;
+abshy1=abshy;
+absez1=absez;
+% abshy1((dz+1)/2,:)=0;
+% absez1(:,(dz+1)/2)=(absez1(:,(dz+1)/2+1)+absez1(:,(dz+1)/2-1))./2;
+% abstez(:,(dz+1)/2)=0;
+for i=1:dz
+    for j=1:dx
+        if (absex1(i,j)>10^5)
+            absex1(i,j)=10^5;
+        end
+    end
+end
+
+for i=1:dz
+    for j=1:dx
+        if (absez1(i,j)<10)
+            absez1(i,j)=10;
+        end
+    end
+end
+
+for i=1:dz
+    for j=1:dx
+        if (absez1(i,j)>10^6)
+            absez1(i,j)=10^6;
+        end
+    end
+end
+
+wcpm_ybs=abs(abshy-(absthy+1.e-20))./(absthy+1.e-20)*100;
+wcpm_ybs1=wcpm_ybs;
+for i=1:dz
+    for j=1:dx
+        if (wcpm_ybs(i,j)<1)
+            wcpm_ybs(i,j)=0;
+        end
+    end
+end
+ 
+wcpm_yl=abs(abshy(97,:)-absthy(97,:))./absthy(97,:)*100;
+wcpm_xl=abs(absex(97,:)-abstex(97,:))./abstex(97,:)*100;
+wcpm_zl=abs(absez(97,:)-abstez(97,:))./abstez(97,:)*100;
+wcpm_zl((dx+1)/2)=0;
+%%
+% le=0.3; 
+% figure
+% %11111111111111111111111111111111111111111111111111111111111111111111111111
+% %%%%%%%主剖面三个场量数值解解析解叠加对比
+% %Hy振幅叠加对比图
+% subplot(3,3,1)
+% contour(x2,z2,log10(absthy),'k','LineWidth',1,'LevelStep',le);
+% % contour(x2,z2,absthy,'k','LineWidth',1.2,'LevelStep',le);
+% hold on
+% contour(x2,z2,log10(abshy),'r--','LineWidth',1,'LevelStep',le);
+% % contour(x2,z2,abshy,'r--','LineWidth',1,'LevelStep',le);
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% title('log10(Abs(H_y))','FontName','Times New Roman','FontSize',12)
+% legend('Analytic solution','Numerical solution')
+% 
+% subplot(3,3,2)
+% contourf(x2,z2,log10(wcpm_ybs));
+% title('Relative error%')
+% colorbar
+% 
+% % %Hy实部叠加对比图
+% subplot(3,3,4)
+% contour(x2,z2,log10(absthry),'k','LineWidth',1,'LevelStep',le);
+% % contour(x2,z2,absthry,'k','LineWidth',1.2,'LevelStep',le);
+% hold on
+% contour(x2,z2,log10(abshry),'r--','LineWidth',1,'LevelStep',le);
+% % contour(x2,z2,abshry,'r--','LineWidth',1,'LevelStep',le);
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% title('log10(Real(H_y))','FontName','Times New Roman','FontSize',12)
+% legend('Analytic solution','Numerical solution')
+% 
+% subplot(3,3,5)
+% contourf(x2,z2,log10(wcpm_yr));
+% title('Relative error%')
+% colorbar
+% 
+% % % %Hy虚部叠加对比图
+% subplot(3,3,7)
+% contour(x2,z2,log10(absthiy),'k','LineWidth',1,'LevelStep',le);
+% % contour(x2,z2,absthiy,'k','LineWidth',1.2,'LevelStep',le);
+% hold on
+% contour(x2,z2,log10(abshiy),'r--','LineWidth',1,'LevelStep',le);
+% % contour(x2,z2,abshiy,'r--','LineWidth',1,'LevelStep',le);
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% title('log10(Immg(H_y))','FontName','Times New Roman','FontSize',12)
+% legend('Analytic solution','Numerical solution')
+% 
+% subplot(3,3,8)
+% contourf(x2,z2,log10(wcpm_yi));
+% title('Relative error%')
+% colorbar
+%  
+% % % %Ex振幅叠加对比图
+% figure
+% subplot(3,3,1)
+% contour(x2,z2,log10(abstex),'k','LineWidth',1.2,'LevelStep',le);
+% % contour(x2,z2,abstex,'k','LineWidth',1.2,'LevelStep',le);
+% hold on
+% contour(x2,z2,log10(absex),'r--','LineWidth',1,'LevelStep',le);
+% % contour(x2,z2,absex,'r--','LineWidth',1,'LevelStep',le);
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% title('log10(Abs(E_x))','FontName','Times New Roman','FontSize',12)
+% legend('Analytic solution','Numerical solution')
+% % 
+% % % %Ex实部叠加对比图
+% subplot(3,3,4)
+% contour(x2,z2,log10(absterx),'k','LineWidth',1.2,'LevelStep',le);
+% % contour(x2,z2,absterx,'k','LineWidth',1.2,'LevelStep',le);
+% hold on
+% contour(x2,z2,log10(abserx),'r--','LineWidth',1,'LevelStep',le);
+% % contour(x2,z2,abserx,'r--','LineWidth',1,'LevelStep',le);
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% title('log10(Real(E_x))','FontName','Times New Roman','FontSize',12)
+% legend('Analytic solution','Numerical solution')
+% % 
+% % % %Ex虚部叠加对比图
+% subplot(3,3,7)
+% contour(x2,z2,log10(absteix),'k','LineWidth',1.2,'LevelStep',le);
+% % contour(x2,z2,absteix,'k','LineWidth',1.2,'LevelStep',le);
+% hold on
+% contour(x2,z2,log10(abseix),'r--','LineWidth',1,'LevelStep',le);
+% % contour(x2,z2,abseix,'r--','LineWidth',1,'LevelStep',le);
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% title('log10(Immag(E_x))','FontName','Times New Roman','FontSize',12)
+% legend('Analytic solution','Numerical solution')
+% % 
+% % % %Ez振幅叠加对比图
+% figure
+% subplot(3,3,1)
+% contour(x2,z2,log10(abstez),'k','LineWidth',1.2,'LevelStep',le);
+% % contour(x2,z2,abstez,'k','LineWidth',1.2,'LevelStep',le);
+% hold on
+% contour(x2,z2,log10(absez),'r--','LineWidth',1,'LevelStep',le);
+% % contour(x2,z2,absez,'r--','LineWidth',1,'LevelStep',le);
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% title('log10(Abs(E_z))','FontName','Times New Roman','FontSize',12)
+% legend('Analytic solution','Numerical solution')
+% % 
+% % % Ex实部叠加对比图
+% subplot(3,3,4)
+% contour(x2,z2,log10(absterz),'k','LineWidth',1.2,'LevelStep',le);
+% % contour(x2,z2,absterz,'k','LineWidth',1.2,'LevelStep',le);
+% hold on
+% contour(x2,z2,log10(abserz),'r--','LineWidth',1,'LevelStep',le);
+% % contour(x2,z2,abserz,'r--','LineWidth',1,'LevelStep',le);
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% title('log10(Real(E_z))','FontName','Times New Roman','FontSize',12)
+% legend('Analytic solution','Numerical solution')
+% % 
+% % % Ex虚部叠加对比图
+% subplot(3,3,7)
+% contour(x2,z2,log10(absteiz),'k','LineWidth',1.2,'LevelStep',le);
+% % contour(x2,z2,absteiz,'k','LineWidth',1.2,'LevelStep',le);
+% hold on
+% contour(x2,z2,log10(abseiz),'r--','LineWidth',1,'LevelStep',le);
+% % contour(x2,z2,abseiz,'r--','LineWidth',1,'LevelStep',le);
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% title('log10(Immag(E_z))','FontName','Times New Roman','FontSize',12)
+% legend('Analytic solution','Numerical solution')
+
+
+
+
+%%
+%%%%%%%%%%%%%%%%%%%66666666666%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%666666666666666666666666%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%66666666666666666666666666666666666666666%%%%%%%%%%%%%%%
+le=0.2;
+%Ex振幅填充对比图
+figure
+colormap('jet')
+subplot(3,3,1)
+% [C,h]=contourf(x2,z2,log10(abstex),'LevelStep',le);
+% set(h,'LineColor','none')
+contourf(x2,z2,log10(absex1),'LevelStep',le);
+title('Numerical solution Abs(E_x)','FontName','Times New Roman','FontSize',12)
+xlabel('x/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+ylabel('z/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+h=colorbar;
+set(get(h,'title'),'string','lg(V/m)','FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+set(h,'FontName','Times New Roman','FontSize',12)
+set(gca,'FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+% 
+subplot(3,3,2)
+% [C,h]=contourf(x2,z2,log10(abstex),'LevelStep',le);
+% set(h,'LineColor','none')
+contourf(x2,z2,log10(absex1),'LevelStep',le);
+title('Analytic solution Abs(E_x)','FontName','Times New Roman','FontSize',12)
+xlabel('x/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+ylabel('z/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+h=colorbar;
+set(get(h,'title'),'string','lg(V/m)','FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+set(h,'FontName','Times New Roman','FontSize',12)
+set(gca,'FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+
+subplot(3,3,3)
+plot(x2(1,:),wcpm_xl,'linewidth',1.2)
+title('z=0.5m');
+xlabel('x/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+ylabel('Relative error%','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+set(gca,'FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+
+% 
+% %Ex实部填充对比图
+% subplot(3,3,4)
+% contourf(x2,z2,log10(abserx),'LevelStep',le);
+% title('Numerical solution Real(E_x)','FontName','Times New Roman','FontSize',12)
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% colorbar
+% % 
+% subplot(3,3,5)
+% contourf(x2,z2,log10(absterx),'LevelStep',le);
+% title('Analytic solution Real(E_x)','FontName','Times New Roman','FontSize',12)
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% colorbar
+% 
+% 
+% %Ex虚部填充对比图
+% subplot(3,3,7)
+% contourf(x2,z2,log10(abseix),'LevelStep',le);
+% title('Numerical solution Imag(E_x)','FontName','Times New Roman','FontSize',12)
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% colorbar
+% 
+% subplot(3,3,8)
+% contourf(x2,z2,log10(absteix),'LevelStep',le);
+% title('Analytic solution Imag(E_x)','FontName','Times New Roman','FontSize',12)
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% colorbar
+% 
+% 
+% %Ez振幅叠加对比图
+% figure
+subplot(3,3,4)
+% [C,h]=contourf(x2,z2,log10(absez),'LevelStep',le);
+% set(h,'LineColor','none')
+contourf(x2,z2,log10(absez1),'LevelStep',le);
+title('Numerical solution Abs(E_z)','FontName','Times New Roman','FontSize',12)
+xlabel('x/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+ylabel('z/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+h=colorbar;
+set(get(h,'title'),'string','lg(V/m)','FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+set(h,'FontName','Times New Roman','FontSize',12)
+set(gca,'FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+% 
+subplot(3,3,5)
+% [C,h]=contourf(x2,z2,log10(absez),'LevelStep',le);
+% set(h,'LineColor','none')
+contourf(x2,z2,log10(absez1),'LevelStep',le);
+title('Analytic solution Abs(E_z)','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+xlabel('x/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+ylabel('z/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+h=colorbar;
+set(get(h,'title'),'string','lg(V/m)','FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+set(h,'FontName','Times New Roman','FontSize',12)
+set(gca,'FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+
+subplot(3,3,6)
+plot(x2(1,:),wcpm_zl,'linewidth',1.2)
+title('z=0.5m');
+xlabel('x/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+ylabel('Relative error%','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+set(gca,'FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+
+% 
+% %Ez实部叠加对比图
+% subplot(3,3,4)
+% contourf(x2,z2,log10(abserz),'LevelStep',le);
+% title('Numerical solution Real(E_z)','FontName','Times New Roman','FontSize',12)
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% colorbar
+% 
+% subplot(3,3,5)
+% contourf(x2,z2,log10(absterz),'LevelStep',le);
+% title('Analytic solution Real(E_z)','FontName','Times New Roman','FontSize',12)
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% colorbar
+% 
+% %Ez虚部叠加对比图
+% subplot(3,3,7)
+% contourf(x2,z2,log10(abseiz),'LevelStep',le);
+% title('Numerical solution Imag(E_z)','FontName','Times New Roman','FontSize',12)
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% colorbar
+% 
+% subplot(3,3,8)
+% contourf(x2,z2,log10(absteiz),'LevelStep',le);
+% title('Analytic solution Imag(E_z)','FontName','Times New Roman','FontSize',12)
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% colorbar
+% 
+% %Hy振幅叠加对比图
+% figure
+subplot(3,3,7)
+% [C,h]=contourf(x2,z2,log10(absthy),'LevelStep',le);
+% set(h,'LineColor','none')
+contourf(x2,z2,log10(absthy),'LevelStep',le);
+title('Numerical solution Abs(H_y)','FontName','Times New Roman','FontSize',12)
+xlabel('x/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+ylabel('z/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+h=colorbar;
+set(get(h,'title'),'string','lg(A/m)','FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+set(h,'FontName','Times New Roman','FontSize',12)
+set(gca,'FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+
+
+subplot(3,3,8)
+% [C,h]=contourf(x2,z2,log10(absthy),'LevelStep',le);
+% set(h,'LineColor','none')
+contourf(x2,z2,log10(absthy),'LevelStep',le);
+title('Analytic solution Abs(H_y)','FontName','Times New Roman','FontSize',12)
+xlabel('x/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+ylabel('z/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+h=colorbar;
+set(get(h,'title'),'string','lg(A/m)','FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+set(h,'FontName','Times New Roman','FontSize',12)
+set(gca,'FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+
+subplot(3,3,9)
+plot(x2(1,:),wcpm_yl,'linewidth',1.2)
+title('z=0.5m');
+xlabel('x/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+ylabel('Relative error%','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+set(gca,'FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+
+% 
+% %Hy实部叠加对比图
+% subplot(3,3,4)
+% contourf(x2,z2,log10(abshry),'LevelStep',le);
+% title('Numerical solution Real(H_y)','FontName','Times New Roman','FontSize',12)
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% colorbar
+% 
+% subplot(3,3,5)
+% contourf(x2,z2,log10(absthry),'LevelStep',le);
+% title('Analytic solution Real(H_y)','FontName','Times New Roman','FontSize',12)
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% colorbar
+% 
+% %Hy虚部叠加对比图
+% subplot(3,3,7)
+% contourf(x2,z2,log10(abshiy),'LevelStep',le);
+% title('Numerical solution Imag(H_y)','FontName','Times New Roman','FontSize',12)
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% colorbar
+% 
+% subplot(3,3,8)
+% contourf(x2,z2,log10(absthiy),'LevelStep',le);
+% title('Analytic solution Imag(H_y)','FontName','Times New Roman','FontSize',12)
+% xlabel('x/m','FontName','Times New Roman','FontSize',12)
+% ylabel('z/m','FontName','Times New Roman','FontSize',12)
+% colorbar
+
+%不要等值线
+%不要等值线
+%不要等值线
+% le=0.2;
+% %Ex振幅填充对比图
+% figure
+% colormap('jet')
+% subplot(3,3,1)
+% [C,h]=contourf(x2,z2,log10(absex1),'LevelStep',le);
+% set(h,'LineColor','none')
+% % contourf(x2,z2,log10(absex1),'LevelStep',le);
+% title('Numerical solution Abs(E_x)','FontName','Times New Roman','FontSize',12)
+% xlabel('x/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+% ylabel('z/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+% h=colorbar;
+% set(get(h,'title'),'string','lg(V/m)','FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+% set(gca,'FontSize',12);
+% % 
+% subplot(3,3,2)
+% [C,h]=contourf(x2,z2,log10(absex1),'LevelStep',le);
+% set(h,'LineColor','none')
+% % contourf(x2,z2,log10(absex1),'LevelStep',le);
+% title('Analytic solution Abs(E_x)','FontName','Times New Roman','FontSize',12)
+% xlabel('x/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+% ylabel('z/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+% h=colorbar;
+% set(get(h,'title'),'string','lg(V/m)','FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+% set(gca,'FontSize',12);
+% 
+% subplot(3,3,3)
+% plot(x2(1,:),wcpm_xl,'linewidth',1.2)
+% title('z=0.5m');
+% xlabel('x/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+% ylabel('Relative error%','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+% set(gca,'FontSize',12);
+% 
+% subplot(3,3,4)
+% [C,h]=contourf(x2,z2,log10(absez1),'LevelStep',le);
+% set(h,'LineColor','none')
+% % contourf(x2,z2,log10(absez1),'LevelStep',le);
+% title('Numerical solution Abs(E_z)','FontName','Times New Roman','FontSize',12)
+% xlabel('x/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+% ylabel('z/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+% h=colorbar;
+% set(get(h,'title'),'string','lg(V/m)','FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+% set(gca,'FontSize',12);
+% % 
+% subplot(3,3,5)
+% [C,h]=contourf(x2,z2,log10(absez1),'LevelStep',le);
+% set(h,'LineColor','none')
+% % contourf(x2,z2,log10(absez1),'LevelStep',le);
+% title('Analytic solution Abs(E_z)','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+% xlabel('x/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+% ylabel('z/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+% h=colorbar;
+% set(get(h,'title'),'string','lg(V/m)','FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+% set(gca,'FontSize',12);
+% 
+% subplot(3,3,6)
+% plot(x2(1,:),wcpm_zl,'linewidth',1.2)
+% title('z=0.5m');
+% xlabel('x/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+% ylabel('Relative error%','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+% set(gca,'FontSize',12);
+% 
+% subplot(3,3,7)
+% [C,h]=contourf(x2,z2,log10(absthy),'LevelStep',le);
+% set(h,'LineColor','none')
+% % contourf(x2,z2,log10(absthy),'LevelStep',le);
+% title('Numerical solution Abs(H_y)','FontName','Times New Roman','FontSize',12)
+% xlabel('x/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+% ylabel('z/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+% h=colorbar;
+% set(get(h,'title'),'string','lg(A/m)','FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+% set(gca,'FontSize',12);
+% 
+% 
+% subplot(3,3,8)
+% [C,h]=contourf(x2,z2,log10(absthy),'LevelStep',le);
+% set(h,'LineColor','none')
+% % contourf(x2,z2,log10(absthy),'LevelStep',le);
+% title('Analytic solution Abs(H_y)','FontName','Times New Roman','FontSize',12)
+% xlabel('x/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+% ylabel('z/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+% h=colorbar;
+% set(get(h,'title'),'string','lg(A/m)','FontName','Times New Roman','FontSize',12,'FontWeight','bold');
+% set(gca,'FontSize',12);
+% 
+% subplot(3,3,9)
+% plot(x2(1,:),wcpm_yl,'linewidth',1.2)
+% title('z=0.5m');
+% xlabel('x/m','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+% ylabel('Relative error%','FontName','Times New Roman','FontSize',12,'FontWeight','bold')
+% set(gca,'FontSize',12);
