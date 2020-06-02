@@ -1,0 +1,343 @@
+clc
+clear all
+close all
+
+nz=301;
+nx=151;
+nx1=301;
+
+fid = fopen('model_canshu_100m_whole_eps_20.dat','r');
+model = fscanf(fid,'%f',[3,inf]);
+
+z=model(1,:);
+x=model(2,:);
+mp=model(3,:);
+
+z=z;
+x=x;
+z1=reshape(z,nz,nx1);
+x1=reshape(x,nz,nx1);
+
+%%---------------------------------------------------------------------------------------
+%介电常数为1
+data1 = load('Theory_pu_100m_whole_eps_1.dat');
+ky = data1(:,1);
+KY = unique(ky);
+NY = length(KY);
+
+hy1  = data1(:,11);
+rhy1 = data1(:,12);
+ihy1 = data1(:,13);
+
+ey1  = data1(:,5);
+rey1 = data1(:,6);
+iey1 = data1(:,7);
+
+hy11=reshape(hy1,NY,nx);
+rhy11=reshape(rhy1,NY,nx);
+ihy11=reshape(ihy1,NY,nx);
+
+ey11=reshape(ey1,NY,nx);
+rey11=reshape(rey1,NY,nx);
+iey11=reshape(iey1,NY,nx);
+
+%%-------------------------------------
+%介电常数为2
+data2 = load('Theory_pu_100m_whole_eps_2.dat');
+
+hy2  = data2(:,11);
+rhy2 = data2(:,12);
+ihy2 = data2(:,13);
+
+ey2  = data2(:,5);
+rey2 = data2(:,6);
+iey2 = data2(:,7);
+
+hy22=reshape(hy2,NY,nx);
+rhy22=reshape(rhy2,NY,nx);
+ihy22=reshape(ihy2,NY,nx);
+
+ey22=reshape(ey2,NY,nx);
+rey22=reshape(rey2,NY,nx);
+iey22=reshape(iey2,NY,nx);
+%%----------------------------------
+%介电常数为5
+data5 = load('Theory_pu_100m_whole_eps_5.dat');
+
+hy5  = data5(:,11);
+rhy5 = data5(:,12);
+ihy5 = data5(:,13);
+
+ey5  = data5(:,5);
+rey5 = data5(:,6);
+iey5 = data5(:,7);
+
+hy55=reshape(hy5,NY,nx);
+rhy55=reshape(rhy5,NY,nx);
+ihy55=reshape(ihy5,NY,nx);
+
+ey55=reshape(ey5,NY,nx);
+rey55=reshape(rey5,NY,nx);
+iey55=reshape(iey5,NY,nx);
+%%----------------------------------
+%介电常数为10
+data10 = load('Theory_pu_100m_whole_eps_10.dat');
+
+hy10  = data10(:,11);
+rhy10 = data10(:,12);
+ihy10 = data10(:,13);
+
+ey10  = data10(:,5);
+rey10 = data10(:,6);
+iey10 = data10(:,7);
+
+hy1010=reshape(hy10,NY,nx);
+rhy1010=reshape(rhy10,NY,nx);
+ihy1010=reshape(ihy10,NY,nx);
+
+ey1010=reshape(ey10,NY,nx);
+rey1010=reshape(rey10,NY,nx);
+iey1010=reshape(iey10,NY,nx);
+%%----------------------------------
+%介电常数为15
+data15 = load('Theory_pu_100m_whole_eps_15.dat');
+
+hy15  = data15(:,11);
+rhy15 = data15(:,12);
+ihy15 = data15(:,13);
+
+ey15  = data15(:,5);
+rey15 = data15(:,6);
+iey15 = data15(:,7);
+
+hy1515=reshape(hy15,NY,nx);
+rhy1515=reshape(rhy15,NY,nx);
+ihy1515=reshape(ihy15,NY,nx);
+
+ey1515=reshape(ey15,NY,nx);
+rey1515=reshape(rey15,NY,nx);
+iey1515=reshape(iey15,NY,nx);
+
+%%----------------------------------
+%介电常数为20
+data20 = load('Theory_pu_100m_whole_eps_20.dat');
+
+hy20  = data20(:,11);
+rhy20 = data20(:,12);
+ihy20 = data20(:,13);
+
+ey20  = data20(:,5);
+rey20 = data20(:,6);
+iey20 = data20(:,7);
+
+hy2020=reshape(hy20,NY,nx);
+rhy2020=reshape(rhy20,NY,nx);
+ihy2020=reshape(ihy20,NY,nx);
+
+ey2020=reshape(ey20,NY,nx);
+rey2020=reshape(rey20,NY,nx);
+iey2020=reshape(iey20,NY,nx);
+
+%%
+aaa=6;
+aa = x1(1,150+aaa)
+%%---------------------------------------------------------------------------------------
+%介电常数为1
+
+ey1_1=ey11(:,aaa);
+rey1_1=rey11(:,aaa);
+iey1_1=iey11(:,aaa);
+hy1_1=hy11(:,aaa);
+rhy1_1=rhy11(:,aaa);
+ihy1_1=ihy11(:,aaa);
+
+%%---------------------------------------------------------------------------------------
+%介电常数为2
+    
+ey2_1=ey22(:,aaa);
+rey2_1=rey22(:,aaa);
+iey2_1=iey22(:,aaa);
+
+hy2_1=hy22(:,aaa);
+rhy2_1=rhy22(:,aaa);
+ihy2_1=ihy22(:,aaa);
+
+%%---------------------------------------------------------------------------------------
+%介电常数为5
+
+ey5_1=ey55(:,aaa);
+rey5_1=rey55(:,aaa);
+iey5_1=iey55(:,aaa);
+
+hy5_1=hy55(:,aaa);
+rhy5_1=rhy55(:,aaa);
+ihy5_1=ihy55(:,aaa);
+
+%%---------------------------------------------------------------------------------------
+%介电常数为10
+
+ey10_1=ey1010(:,aaa);
+rey10_1=rey1010(:,aaa);
+iey10_1=iey1010(:,aaa);
+
+hy10_1=hy1010(:,aaa);
+rhy10_1=rhy1010(:,aaa);
+ihy10_1=ihy1010(:,aaa);
+
+%%---------------------------------------------------------------------------------------
+%介电常数为15
+
+ey15_1=ey1515(:,aaa);
+rey15_1=rey1515(:,aaa);
+iey15_1=iey1515(:,aaa);
+
+hy15_1=hy1515(:,aaa);
+rhy15_1=rhy1515(:,aaa);
+ihy15_1=ihy1515(:,aaa);
+
+%%---------------------------------------------------------------------------------------
+%介电常数为20
+
+ey20_1=ey2020(:,aaa);
+rey20_1=rey2020(:,aaa);
+iey20_1=iey2020(:,aaa);
+
+hy20_1=hy2020(:,aaa);
+rhy20_1=rhy2020(:,aaa);
+ihy20_1=ihy2020(:,aaa);
+%%
+figure
+% subplot(2,2,1)
+% plot(log10(KY),ey1_1,'k')
+% hold on
+% plot(log10(KY),ey2_1,'r')
+% hold on
+% plot(log10(KY),ey5_1,'b')
+% hold on
+% plot(log10(KY),ey10_1,'g')
+% hold on
+% plot(log10(KY),ey15_1,'color',[36,169,225]/225)
+% hold on
+% plot(log10(KY),ey20_1,'color',[222,125,44]/225)
+subplot(2,2,1)
+semilogx(KY,ey1_1,'k','linewidth',0.5)
+hold on
+semilogx(KY,ey2_1,'r','linewidth',0.5)
+hold on
+semilogx(KY,ey5_1,'b','linewidth',0.5)
+hold on
+semilogx(KY,ey10_1,'g','linewidth',0.5)
+hold on
+semilogx(KY,ey15_1,'color',[36,169,225]/225,'linewidth',0.5)
+hold on
+semilogx(KY,ey20_1,'color',[222,125,44]/225,'linewidth',0.5)
+h1=legend('\epsilon_r=1','\epsilon_r=2','\epsilon_r=5','\epsilon_r=10','\epsilon_r=15','\epsilon_r=20')%  title(aa);
+h1.ItemTokenSize = [10,5];
+set(h1,'Box','off')
+% title(',E_y')
+% xlabel('log10(Ky)')
+% ylabel('E_y')
+ xlabel('k_y(m^-^1)','FontName','Euclid','FontSize',7)
+ h=ylabel('abs($$\hat{E_y}$$)(V)','FontName','Euclid','FontSize',7);
+ set(h,'interpreter','latex','FontName','Euclid','FontSize',7)
+ title('d_x=0.1m','FontName','Euclid','FontSize',7)
+ set(gca,'FontName','Euclid','FontSize',7)
+ xlim([10^-5,10^5])
+ LA=axis;
+text((LA(2)-LA(1))*0.1+LA(1),(LA(4)-LA(3))*0.1+LA(3),'(a)','FontName','Euclid','FontSize',7);
+
+subplot(2,2,2)
+% plot(log10(KY),hy1_1,'k')
+% hold on
+% plot(log10(KY),hy2_1,'r')
+% hold on
+% plot(log10(KY),hy5_1,'b')
+% hold on
+% plot(log10(KY),hy10_1,'g')
+% hold on
+% plot(log10(KY),hy15_1,'color',[36,169,225]/225)
+% hold on
+% plot(log10(KY),hy20_1,'color',[222,125,44]/225)
+semilogx(KY,hy1_1,'k','linewidth',0.5)
+hold on
+semilogx(KY,hy2_1,'r','linewidth',0.5)
+hold on
+semilogx(KY,hy5_1,'b','linewidth',0.5)
+hold on
+semilogx(KY,hy10_1,'g','linewidth',0.5)
+hold on
+semilogx(KY,hy15_1,'color',[36,169,225]/225,'linewidth',0.5)
+hold on
+semilogx(KY,hy20_1,'color',[222,125,44]/225,'linewidth',0.5)
+h1=legend('\epsilon_r=1','\epsilon_r=2','\epsilon_r=5','\epsilon_r=10','\epsilon_r=15','\epsilon_r=20')
+h1.ItemTokenSize = [10,5];
+set(h1,'Box','off')
+% title('10m,H_y')
+%  title(aa);
+% xlabel('log10(Ky)')
+% ylabel('H_y')
+ xlabel('k_y(m^-^1)','FontName','Euclid','FontSize',7)
+%  ylabel('H_y','FontName','Euclid','FontSize',7
+h=ylabel('abs($$\hat{H_y}$$)(A)','FontName','Euclid','FontSize',7);
+set(h,'interpreter','latex','FontName','Euclid','FontSize',7)
+title('d_x=0.1m','FontName','Euclid','FontSize',7)
+ set(gca,'FontName','Euclid','FontSize',7)
+ xlim([10^-5,10^5])
+ LA=axis;
+text((LA(2)-LA(1))*0.1+LA(1),(LA(4)-LA(3))*0.1+LA(3),'(b)','FontName','Euclid','FontSize',7);
+ 
+subplot(2,2,3)
+plot(KY,ey1_1,'k','linewidth',0.5)
+hold on
+plot(KY,ey2_1,'r','linewidth',0.5)
+hold on
+plot(KY,ey5_1,'b','linewidth',0.5)
+hold on
+plot(KY,ey10_1,'g','linewidth',0.5)
+hold on
+plot(KY,ey15_1,'color',[36,169,225]/225,'linewidth',0.5)
+hold on
+plot(KY,ey20_1,'color',[222,125,44]/225,'linewidth',0.5)
+h1=legend('\epsilon_r=1','\epsilon_r=2','\epsilon_r=5','\epsilon_r=10','\epsilon_r=15','\epsilon_r=20')% axis([0 2 0 0 900])
+h1.ItemTokenSize = [10,5];
+set(h1,'Box','off')
+% title('10m,E_y')
+xlim([0 25])
+%  title(aa);
+ xlabel('k_y(m^-^1)','FontName','Euclid','FontSize',7)
+%  ylabel('E_y','FontName','Euclid','FontSize',7)
+ h=ylabel('abs($$\hat{E_y}$$)(V)','FontName','Euclid','FontSize',7);
+ set(h,'interpreter','latex','FontName','Euclid','FontSize',7)
+ title('d_x=0.1m','FontName','Euclid','FontSize',7)
+ set(gca,'FontName','Euclid','FontSize',7)
+ LA=axis;
+text((LA(2)-LA(1))*0.9+LA(1),(LA(4)-LA(3))*0.1+LA(3),'(c)','FontName','Euclid','FontSize',7);
+
+subplot(2,2,4)
+plot(KY,hy1_1,'k','linewidth',0.5)
+hold on
+plot(KY,hy2_1,'r','linewidth',0.5)
+hold on
+plot(KY,hy5_1,'b','linewidth',0.5)
+hold on
+plot(KY,hy10_1,'g','linewidth',0.5)
+hold on
+plot(KY,hy15_1,'color',[36,169,225]/225,'linewidth',0.5)
+hold on
+plot(KY,hy20_1,'color',[222,125,44]/225,'linewidth',0.5)
+h1=legend('\epsilon_r=1','\epsilon_r=2','\epsilon_r=5','\epsilon_r=10','\epsilon_r=15','\epsilon_r=20')% axis([0 300 0 60])
+h1.ItemTokenSize = [10,5];
+set(h1,'Box','off')
+xlim([0 150])
+% title('10m,H_y')
+%  title(aa);
+% xlabel('Ky')
+% ylabel('H_y')
+ xlabel('k_y(m^-^1)','FontName','Euclid','FontSize',7)
+%  ylabel('H_y','FontName','Euclid','FontSize',7)
+ h=ylabel('abs($$\hat{H_y}$$)(A)','FontName','Euclid','FontSize',7);
+ set(h,'interpreter','latex','FontName','Euclid','FontSize',7)
+ title('d_x=0.1m','FontName','Euclid','FontSize',7)
+ set(gca,'FontName','Euclid','FontSize',7)
+LA=axis;
+text((LA(2)-LA(1))*0.9+LA(1),(LA(4)-LA(3))*0.1+LA(3),'(d)','FontName','Euclid','FontSize',7);
